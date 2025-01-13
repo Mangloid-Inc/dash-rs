@@ -3,7 +3,7 @@ use crate::{
         level::{DemonRating, LevelLength, LevelRating},
         song::MainSong,
     },
-    request::{BaseRequest, GD_22, get_gdps_url},
+    request::{BaseRequest, GD_22, base_request_url, const_setter},
 };
 use serde::{Deserialize, Serialize, Serializer};
 
@@ -85,8 +85,7 @@ impl<'a> LevelRequest<'a> {
     }
 
     pub fn to_url(&self) -> String {
-        let request_base_url = get_gdps_url();
-        format!("{}{}", request_base_url, DOWNLOAD_LEVEL_ENDPOINT)
+        format!("{}{}", base_request_url(), DOWNLOAD_LEVEL_ENDPOINT)
     }
 }
 
@@ -537,8 +536,7 @@ impl<'a> LevelsRequest<'a> {
     const_setter!(request_type: LevelRequestType);
 
     pub fn to_url(&self) -> String {
-        let request_base_url = get_gdps_url();
-        format!("{}{}", request_base_url, SEARCH_LEVEL_ENDPOINT)
+        format!("{}{}", base_request_url(), SEARCH_LEVEL_ENDPOINT)
     }
 
     pub fn with_base(base: BaseRequest<'a>) -> Self {

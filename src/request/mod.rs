@@ -8,13 +8,13 @@
 
 use crate::{model::GameVersion, serde::RequestSerializer};
 use serde::{Deserialize, Serialize};
-use once_cell::sync::OnceCell;
+use std::sync::OnceLock;
 
 pub mod comment;
 pub mod level;
 pub mod user;
 
-macro_rules! const_setter {
+#[macro_export] macro_rules! const_setter {
     ($name: ident, $field: ident, $t: ty) => {
         pub const fn $name(mut self, $field: $t) -> Self {
             self.$field = $field;
@@ -46,10 +46,12 @@ macro_rules! const_setter {
     }
 }
 
+pub use const_setter;
+
 pub static REQUEST_BASE: OnceLock<&'static str> = OnceLock::new();
 
 pub fn base_request_url() -> String {
-    GDPS_URL.get_or_init(|| BOOMLINGS_REQUEST_BASE.to_string())
+    REQUEST_BASE.get_or_init(|| BOOMLINGS_REQUEST_BASE).to_string()
 }
 
 pub const BOOMLINGS_REQUEST_BASE: &str = "https://www.boomlings.com/database/";
